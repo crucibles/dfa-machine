@@ -60,16 +60,12 @@ public class DFATable {
         for (int i = 0; i < string.length(); i++) {
             System.out.println(currState.getStateName());
             currState = getNextState(currState, string.charAt(i));
+            if(currState == null){
+                return false;
+            }
         }
-        System.out.println("final: " + currState.getStateCategory());
-        System.out.println("final: " + currState.getStateName());
-        if(currState.getStateCategory().equals("+")){
-            System.out.println("true");
-            return true;
-        } else {
-            System.out.println("false");
-            return false;
-        }
+        
+        return currState.getStateCategory().equals("+");
     }
 
     /**
@@ -121,11 +117,41 @@ public class DFATable {
         return null;
     }
 
+    /**
+     * Clears the DFA table's content.
+     */
     public void clear(){
         dfaTable.clear();
     }
 
-    // public int getStateOccurrence(String name){
-    //     return Collections.frequency(dfaTable, name);
-    // }
+    /**
+     * Checks for the validity of the states inside the DFA table.
+     * 
+     * @return true if all states are valid; false if at least one state is invalid.
+     */
+    public boolean isValidStates() {
+        for (int i = 0; i < dfaTable.size(); i++) {
+            DFAState currState = dfaTable.get(i);
+            if (!currState.getStateName().matches("[A-Z]+") && !currState.getDestination0().matches("[A-Z]+") && !currState.getDestination1().matches("[A-Z]+")){
+                System.out.println("small");
+                return false;
+            }
+            
+            if(!currState.getStateCategory().equals("+") && !currState.getStateCategory().equals("$") && !currState.getStateCategory().equals("-")){
+                System.out.println("sym");
+                return false;
+            }
+            
+            if(getStateOfName(currState.getDestination0()) == null) {
+                System.out.println("name0");
+                return false;
+            }
+
+            if(getStateOfName(currState.getDestination1()) == null) {
+                System.out.println("name1");
+                return false;
+            }
+        }
+        return true;
+    }
 }

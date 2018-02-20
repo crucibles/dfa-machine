@@ -15,8 +15,8 @@ import javax.swing.filechooser.FileSystemView;
 
 public class FileHandler {
 
-	public String dfaName;
-	public String inpName;
+	public String dfaName = "";
+	public String inpName = "";
 	public File inpFile;
 	public BufferedReader reader;
 	private CustomFileChooser fileChooser = new CustomFileChooser("inp");
@@ -49,7 +49,6 @@ public class FileHandler {
 	public String saveFile(String output, JFrame frame) {
 		try {
 			selectedFile = fileChooser.getSelectedFile();
-			System.out.println(selectedFile + "hehe");
 			if (selectedFile != null) {
 				System.out.println("hello");
 				String name = selectedFile.getName();
@@ -93,8 +92,6 @@ public class FileHandler {
 	public String createFile(String output, JFrame frame) throws IOException {
 		Writer writer = null;
 
-		System.out.println("hi saving..");
-
 		try {
 			//AHJ: unimplemented; #01: weird part here. Filechooser can choose in or out for extension in saving file... so unsaon pagkabalo? (Also, this savefile function does not include saving of .in file)
 			String fileName = inpFile.getCanonicalPath();
@@ -102,7 +99,6 @@ public class FileHandler {
 
 			selectedFile = new File(fileName.replace(".inp", ".out"));
 			
-
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(selectedFile)));
 			writer.write(output);
 			//AHJ: unimplemented; (not properly implemented)refer to comment #01
@@ -130,7 +126,7 @@ public class FileHandler {
 	public File chooseFile(JFrame frame) {
 		int file = fileChooser.showOpenDialog(frame);
 		if (file == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = fileChooser.getSelectedFile();
+			selectedFile = fileChooser.getSelectedFile();
 			if (selectedFile.isFile() && (getFileExtension(getFileName()).equals("inp")
 					|| getFileExtension(getFileName()).equals("dfa"))) {
 				if (getFileExtension(getFileName()).equals("inp")) {

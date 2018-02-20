@@ -13,7 +13,7 @@ public class DFAMachine {
 	private FileHandler dfaHandler = null;
 	private FileHandler inputHandler = null;
 	FileHandler fileHandler = new FileHandler();
-	DFATable dfaTable = new DFATable();
+	DFATable dfaTable = null;
 
 	/**
 	 * Launch the application.
@@ -40,8 +40,9 @@ public class DFAMachine {
 	/*
 	* Creates the table based on a .dfa file.
 	*/
-	private void createTable(String transitions) {
-		dfaTable.clear();
+	private boolean createTable(String transitions) {
+		DFATable temp = new DFATable();
+
 		//String transitions = "-,A,B,A\n$,B,B,C\n+,C,B,A";
 
 		if (checker(transitions)) {
@@ -50,17 +51,26 @@ public class DFAMachine {
 			for (int x = 0; x < lines.length; x++) {
 
 				String line = lines[x];
-				System.out.println(line);
 				String[] tokens = line.trim().split(",");
 				// int occurrences = dfaTable.getStateOccurrence(tokens[1]);
 				// if(occurrences > 0){
 				// 	tokens[1] += occurrences; 
 				// }
-				dfaTable.addState(new DFAState(tokens[0], tokens[1], tokens[2], tokens[3]));
-			}
-		}
+				DFAState newState = new DFAState(tokens[0], tokens[1], tokens[2], tokens[3]);
 
-		gui.setTable(dfaTable);
+				temp.addState(newState);
+			}
+
+			if (!temp.isValidStates()) {
+				return false;
+			} else {
+				dfaTable = temp;
+				gui.setTable(dfaTable);
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -118,21 +128,28 @@ public class DFAMachine {
 	 * @throws IOException
 	 */
 	private void loadFile() throws IOException {
-		System.out.println("this is where I am");
 		File selectedFile = fileHandler.chooseFile(gui.frame);
 		if (selectedFile != null) {
 			System.out.println(selectedFile.getName());
 			FileReader file = new FileReader(fileHandler.getFileChooser().getSelectedFile().getAbsolutePath());
 			fileHandler.reader = new BufferedReader(file);
 			String fileExt = fileHandler.getFileExtension(fileHandler.getFileName());
-			System.out.println(fileExt);
 			if (fileExt.equals("inp")) {
+				inputHandler = new FileHandler();
 				inputHandler = fileHandler;
 				gui.setInputText(inputHandler.getFileContent());
+				gui.setStatus("Input from file " + inputHandler.getFileName() + " has been successfully loaded.");
 			} else if (fileExt.equals("dfa")) {
-				System.out.println("dfa!");
-				dfaHandler = fileHandler;
-				createTable(dfaHandler.getFileContent());
+				if (createTable(fileHandler.getFileContent())) {
+					dfaHandler = new FileHandler();
+					dfaHandler = fileHandler;
+					gui.setStatus("Input from file " + dfaHandler.getFileName() + " has been successfully loaded.");
+				} else {
+					String errorStatus = dfaHandler == null
+							? "Unable to load content from " + fileHandler.getFileName() + " due to invalid content."
+							: "Unable to load content from " + fileHandler.getFileName() + " due to invalid content. The program will be using the content from the most recently successfully loaded " + dfaHandler.getFileName() + ".";
+					gui.setStatus(errorStatus);
+				}
 			}
 			// String line = fileHandler.reader.readLine();
 
@@ -164,7 +181,9 @@ public class DFAMachine {
 					JOptionPane.PLAIN_MESSAGE);
 
 		} else {
-
+			gui.setStatus("Input from file " + inputHandler.inpName
+					+ " has been successfully loaded using DFA table from " + dfaHandler.dfaName + ". Output saved to "
+					+ inputHandler.getFileName().replace(".inp", ".out"));
 			gui.resetText();
 			String line = gui.tpInput.getText();
 			String[] lines = line.trim().split("\\s");
@@ -173,13 +192,12 @@ public class DFAMachine {
 
 				String inp = lines[i];
 				String isValid = dfaTable.isValidString(inp) ? "VALID\n" : "INVALID\n";
-				output+=isValid;
+				output += isValid;
 				gui.addOutput(isValid);
 
 			}
 
 			fileHandler.createFile(output, gui.frame);
-			
 		}
 	}
 
