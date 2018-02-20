@@ -74,6 +74,7 @@ public class FileHandler {
 			}
 
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -84,6 +85,7 @@ public class FileHandler {
 		try {
 			createFile(output, frame);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -4,7 +4,6 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 
-
 public class DFAMachine {
 	
 	private GUI gui;
@@ -18,9 +17,7 @@ public class DFAMachine {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					System.out.println("hello");
 					new DFAMachine();
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
