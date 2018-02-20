@@ -53,6 +53,10 @@ public class DFATable {
     public boolean isValidString(String string) {
         System.out.println("checking out: " + string);
         DFAState currState = getStartState();
+        if(currState == null){
+            return false;
+        }
+
         for (int i = 0; i < string.length(); i++) {
             System.out.println(currState.getStateName());
             currState = getNextState(currState, string.charAt(i));

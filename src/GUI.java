@@ -113,6 +113,7 @@ public class GUI {
 
 	public void setTable(DFATable dfaTable){
 		DefaultTableModel model = (DefaultTableModel) tbTransition.getModel();
+		model.setRowCount(0);
 		for(int i = 0; i < dfaTable.getNumberOfRows(); i++){
 			DFAState state = dfaTable.getStateAt(i);
 			String category = state.getStateCategory().equals("-") || state.getStateCategory().equals("+") ? state.getStateCategory(): ""; 
