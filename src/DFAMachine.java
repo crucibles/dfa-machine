@@ -29,8 +29,8 @@ public class DFAMachine {
 	 * Constructor
 	 */
 	public DFAMachine() {
-		createTable();
-		//initialize();
+		//createTable();
+		initialize();
 	}
 
 	/*
@@ -102,16 +102,16 @@ public class DFAMachine {
 
 		File selectedFile = fileHandler.chooseFile(gui.frame);
 		System.out.println(selectedFile.getName());
-		if ( selectedFile != null) {
+		if (selectedFile != null) {
 			if (fileHandler.getFileExtension(fileHandler.getFileName()) == "inp") {
 				// fill the input table area
-			} else if(fileHandler.getFileExtension(fileHandler.getFileName()) == "dfa"){
+				gui.setDFACell(0, 0, "H");
+
+			} else if (fileHandler.getFileExtension(fileHandler.getFileName()) == "dfa") {
 				// fill the dfa table
 			}
 		}
 	}
-
-	
 
 	/**
 	 * Processes input based on transition table.

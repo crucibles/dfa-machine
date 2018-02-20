@@ -23,6 +23,13 @@ public class GUI {
 		initialize();
 	}
 
+	/*
+	* Setting a value for a cell of the DFA Table
+	*/
+	public setDFACell(int row, int column, String value){
+		tbTransition.getModel().setValueAt(value, row, column);
+	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
