@@ -121,6 +121,9 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Appends text to the output text panel.
+	 */
 	public void addOutput(String newInp){
 		StyledDocument doc = tpOutput.getStyledDocument();
 
@@ -132,6 +135,9 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Appends text to the input text panel.
+	 */
 	public void addInput(String newInp){
 		StyledDocument doc = tpInput.getStyledDocument();
 
@@ -143,6 +149,9 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Resets text of the input and output text panel.
+	 */
 	public void resetText(){
 		tpOutput.setText("");
 		tpInput.setText("");

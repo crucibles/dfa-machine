@@ -42,7 +42,7 @@ public class DFAMachine {
 	}
 
 	/*
-	* test
+	* Creates the table based on a .dfa file.
 	*/
 	private void createTable() {
 
@@ -56,7 +56,10 @@ public class DFAMachine {
 				String line = lines[x];
 				System.out.println(line);
 				String[] tokens = line.trim().split(",");
-
+				// int occurrences = dfaTable.getStateOccurrence(tokens[1]);
+				// if(occurrences > 0){
+				// 	tokens[1] += occurrences; 
+				// }
 				dfaTable.addState(new DFAState(tokens[0], tokens[1], tokens[2], tokens[3]));
 			}
 		}
@@ -64,6 +67,9 @@ public class DFAMachine {
 		gui.setTable(dfaTable);
 	}
 
+	/**
+	 * Checks whether a state is valid or not.
+	 */
 	private boolean checker(String transitions) {
 		if (transitions.indexOf('-') != transitions.lastIndexOf('-')) {
 			System.out.println("more than 1 start state!");
@@ -135,16 +141,15 @@ public class DFAMachine {
 	}
 
 	
-
 	/**
 	 * Processes input based on transition table.
 	 */
 	private void process() {
 		//String inp = "110011\n0111110001\n1001010\n100";
 		gui.resetText();
-		String inp = "110011";
-		String isValid = checkInputString(inp)? "VALID\n": "INVALID\n";
-		gui.addInput(inp);
+		String input = "11001";
+		String isValid = dfaTable.isValidString(input)? "VALID\n": "INVALID\n";
+		gui.addInput(input);
 		gui.addOutput(isValid);
 		
 		/*if(inputHandler == null){
@@ -155,11 +160,6 @@ public class DFAMachine {
 		} else {
 				
 		}*/
-	}
-
-	private boolean checkInputString(String input){
-		dfaTable.isValidString(input);
-		return false;
 	}
 
 }
