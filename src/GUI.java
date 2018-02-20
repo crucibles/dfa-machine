@@ -17,7 +17,7 @@ public class GUI {
 	private JTable tbTransition;
 	private JTextPane tpStatus;
 	private JTextPane tpOutput;
-	private JTextPane tpInput;
+	public JTextPane tpInput;
 	public JButton btnLoadFile;
 	public JButton btnProcess;
 
@@ -26,13 +26,6 @@ public class GUI {
 	 */
 	public GUI() {
 		initialize();
-	}
-
-	/*
-	* Setting a value for a cell of the DFA Table
-	*/
-	public setDFACell(int row, int column, String value){
-		tbTransition.getModel().setValueAt(value, row, column);
 	}
 
 	/**
@@ -149,8 +142,11 @@ public class GUI {
 		}
 	}
 
+	public void setInputText(String input){
+		tpInput.setText(input);
+	}
+
 	public void resetText(){
 		tpOutput.setText("");
-		tpInput.setText("");
 	}
 }

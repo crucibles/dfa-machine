@@ -3,11 +3,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-
 import javax.swing.JOptionPane;
 
 public class DFAMachine {
@@ -38,15 +35,15 @@ public class DFAMachine {
 	 */
 	public DFAMachine() {
 		initialize();
-		createTable();
+		//createTable();
 	}
 
 	/*
 	* test
 	*/
-	private void createTable() {
+	private void createTable(String transitions) {
 
-		String transitions = "-,A,B,A\n$,B,B,C\n+,C,B,A";
+		//String transitions = "-,A,B,A\n$,B,B,C\n+,C,B,A";
 
 		if (checker(transitions)) {
 			String[] lines = transitions.trim().split("\\s");
@@ -111,28 +108,21 @@ public class DFAMachine {
 	 * @throws IOException
 	 */
 	private void loadFile() throws IOException {
-		FileHandler fileHandler = new FileHandler();
+		System.out.println("this is where I am");
 		File selectedFile = fileHandler.chooseFile(gui.frame);
-<<<<<<< HEAD
-		System.out.println(selectedFile.getName());
 		if (selectedFile != null) {
-			if (fileHandler.getFileExtension(fileHandler.getFileName()) == "inp") {
-				// fill the input table area
-				gui.setDFACell(0, 0, "H");
-
-			} else if (fileHandler.getFileExtension(fileHandler.getFileName()) == "dfa") {
-				// fill the dfa table
-=======
-		if (selectedFile != null) {
+			System.out.println(selectedFile.getName());
 			FileReader file = new FileReader(fileHandler.getFileChooser().getSelectedFile().getAbsolutePath());
 			fileHandler.reader = new BufferedReader(file);
 			String fileExt = fileHandler.getFileExtension(fileHandler.getFileName());
-			if (fileExt.equals("in")) {
+			System.out.println(fileExt);
+			if (fileExt.equals("inp")) {
 				inputHandler = fileHandler;
+				gui.setInputText(inputHandler.getFileContent());
 			} else if (fileExt.equals("dfa")) {
 				System.out.println("dfa!");
 				dfaHandler = fileHandler;
->>>>>>> 7e17dc8514d8385b31a4fd9132a51efd14bbe599
+				createTable(dfaHandler.getFileContent());
 			}
 			// String line = fileHandler.reader.readLine();
 
@@ -141,7 +131,7 @@ public class DFAMachine {
 			// 	line = fileHandler.reader.readLine();
 			// }
 		} else {
-
+			System.out.println("hello im else");
 		}
 	}
 
@@ -150,23 +140,36 @@ public class DFAMachine {
 	 */
 	private void process() {
 		//String inp = "110011\n0111110001\n1001010\n100";
-		gui.resetText();
-		String inp = "110011";
-		String isValid = checkInputString(inp)? "VALID\n": "INVALID\n";
-		gui.addInput(inp);
-		gui.addOutput(isValid);
-		
-		/*if(inputHandler == null){
+
+		if (inputHandler == null) {
+
 			gui.setStatus("Cannot process. You have not loaded an .inp file!");
-			JOptionPane.showMessageDialog(gui.frame, "Cannot process. You have not loaded an .inp file!", "File Error", JOptionPane.PLAIN_MESSAGE);
-		} else if(dfaHandler == null){
-			JOptionPane.showMessageDialog(gui.frame, "Cannot process. You have not loaded a .dfa file!", "File Error", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(gui.frame, "Cannot process. You have not loaded an .inp file!", "File Error",
+					JOptionPane.PLAIN_MESSAGE);
+
+		} else if (dfaHandler == null) {
+
+			JOptionPane.showMessageDialog(gui.frame, "Cannot process. You have not loaded a .dfa file!", "File Error",
+					JOptionPane.PLAIN_MESSAGE);
+
 		} else {
-				
-		}*/
+
+			gui.resetText();
+			String line = gui.tpInput.getText();
+			String[] lines = line.trim().split("\\s");
+
+			for (int i = 0; i < lines.length; i++) {
+
+				String inp = lines[i];
+				String isValid = checkInputString(inp) ? "VALID\n" : "INVALID\n";
+				gui.addOutput(isValid);
+
+			}
+			
+		}
 	}
 
-	private boolean checkInputString(String input){
+	private boolean checkInputString(String input) {
 		dfaTable.isValidString(input);
 		return false;
 	}

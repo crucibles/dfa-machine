@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -18,7 +19,7 @@ public class FileHandler {
 	public String inpName;
 	public BufferedReader reader;
 	private CustomFileChooser fileChooser = new CustomFileChooser("inp");
-	private Vector<CustomFileChooser> fileHandlers = new Vector<CustomFileChooser>();
+	private File selectedFile;
 
 	public FileHandler() {
 		this.fileChooser.setCurrentDirectory(new File(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath()));
@@ -37,17 +38,6 @@ public class FileHandler {
 	}
 
 	/**
-	 * Gets the vector of FileHandler
-	 * 
-	 * @return the vector of FileHandlers for each tab
-	 * 
-	 * @author Alvaro, Cedric Y.
-	 */
-	public Vector<CustomFileChooser> getfileHandlers() {
-		return fileHandlers;
-	}
-
-	/**
 	 * Save the file to an output file. Save automatic if existing already, else choose a directory  where to save the file.
 	 * 
 	 * @return file's extension (.e.g. in (file.in), out (file.out))
@@ -56,7 +46,7 @@ public class FileHandler {
 	 */
 	public String saveFile(String output, JFrame frame) {
 		try {
-			File selectedFile = fileChooser.getSelectedFile();
+			selectedFile = fileChooser.getSelectedFile();
 			System.out.println(selectedFile + "hehe");
 			if (selectedFile != null) {
 				System.out.println("hello");
@@ -106,13 +96,13 @@ public class FileHandler {
 
 			if (status == JFileChooser.APPROVE_OPTION) {
 				System.out.println("hi");
-				File selectedFile = fileChooser.getSelectedFile();
+				selectedFile = fileChooser.getSelectedFile();
 
 				try {
 					//AHJ: unimplemented; #01: weird part here. Filechooser can choose in or out for extension in saving file... so unsaon pagkabalo? (Also, this savefile function does not include saving of .in file)
 					String fileName = selectedFile.getCanonicalPath();
-					if (!fileName.endsWith(".in")) {
-						selectedFile = new File(fileName + ".in");
+					if (!fileName.endsWith(".inp")) {
+						selectedFile = new File(fileName + ".inp");
 					}
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(selectedFile)));
 					writer.write(output);
@@ -136,7 +126,7 @@ public class FileHandler {
 	}
 
 	/**
-	 * Choose file from the user's home directory. Checks if file exists
+	 * Choose file from the user's home directory. Checks if file exists as an inp or dfa file.
 	 * 
 	 * @author Alvaro, Cedric Y.
 	 */
@@ -144,7 +134,7 @@ public class FileHandler {
 		int file = fileChooser.showOpenDialog(frame);
 		if (file == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-			if (selectedFile.isFile() && getFileExtension(getFileName()).equals("inp")) {
+			if (selectedFile.isFile() && (getFileExtension(getFileName()).equals("inp") || getFileExtension(getFileName()).equals("dfa")) ){
 				return selectedFile;
 			} else {
 				return null;
@@ -160,7 +150,7 @@ public class FileHandler {
 	 * @author Alvaro, Cedric Y.
 	 */
 	public boolean isCurrFile() {
-		File selectedFile = fileChooser.getSelectedFile();
+		selectedFile = fileChooser.getSelectedFile();
 
 		if (selectedFile == null) {
 			return true;
@@ -174,9 +164,25 @@ public class FileHandler {
 	 * Load the file of the given url
 	 * 
 	 * @author Alvaro, Cedric Y.
+	 * @throws IOException
 	 */
-	public void loadFile() {
+	public String getFileContent() throws IOException {
+		this.selectedFile = fileChooser.getSelectedFile();
+		
+		// stores the selected file and obtained a line
+		FileReader fileReader = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
+		reader = new BufferedReader(fileReader);
+		String line = reader.readLine();
+		String fileContent = "";
+		while(line != null){
+			fileContent+=line;
+			fileContent+="\n";
+			line = reader.readLine(); // reads next line
+		}
 
+		System.out.println(fileContent);
+		reader.close();
+		return fileContent;
 	}
 
 	/**
