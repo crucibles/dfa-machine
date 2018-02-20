@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -15,14 +14,14 @@ import javax.swing.filechooser.FileSystemView;
 
 public class FileHandler {
 
+
+	
 	public BufferedReader reader;
 	private CustomFileChooser fileChooser = new CustomFileChooser("in");
 	private Vector<CustomFileChooser> fileHandlers = new Vector<CustomFileChooser>();
 
 	public FileHandler() {
-		System.out.println("im in");
-		this.fileChooser
-				.setCurrentDirectory(new File(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath()));
+		this.fileChooser.setCurrentDirectory(new File(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath()));
 		this.fileChooser.setAcceptAllFileFilterUsed(false);
 	}
 
@@ -67,12 +66,6 @@ public class FileHandler {
 					selectedFile = new File(selectedFile.getParentFile(), name + '.' + "in");
 				}
 
-				Writer writer = null;
-				File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-				writer = new BufferedWriter(new FileWriter(file));
-				writer.write(output);
-				writer.close();
-
 				return fileChooser.getSelectedFile().getName();
 			} else {
 				String fileName = createFile(output, frame);
@@ -81,7 +74,6 @@ public class FileHandler {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -92,7 +84,6 @@ public class FileHandler {
 		try {
 			createFile(output, frame);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -147,17 +138,17 @@ public class FileHandler {
 	 * 
 	 * @author Alvaro, Cedric Y.
 	 */
-	public boolean chooseFile(JFrame frame) {
+	public File chooseFile(JFrame frame) {
 		int file = fileChooser.showOpenDialog(frame);
 		if (file == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			if (selectedFile.isFile() && getFileExtension(getFileName()).equals("in")) {
-				return true;
+				return selectedFile;
 			} else {
-				return false;
+				return null;
 			}
 		} else {
-			return false;
+			return null;
 		}
 	}
 
