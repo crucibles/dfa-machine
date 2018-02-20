@@ -115,7 +115,8 @@ public class GUI {
 		DefaultTableModel model = (DefaultTableModel) tbTransition.getModel();
 		for(int i = 0; i < dfaTable.getNumberOfRows(); i++){
 			DFAState state = dfaTable.getStateAt(i);
-			String row[] = {state.getStateCategory(), state.getStateName(), state.getDestination0(), state.getDestination1()};
+			String category = state.getStateCategory().equals("-") || state.getStateCategory().equals("+") ? state.getStateCategory(): ""; 
+			String row[] = {category, state.getStateName(), state.getDestination0(), state.getDestination1()};
 			model.addRow(row);
 		}
 	}
