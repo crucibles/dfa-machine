@@ -6,23 +6,12 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch)-DFAMachine<DFAMachine>",
+            "name": "Debug (Launch)-DFAMachine",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopOnEntry": false,
             "mainClass": "DFAMachine",
-            "projectName": "DFAMachine",
-            "args": ""
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-ExpressionEvaluator",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "ExpressionEvaluator",
             "args": ""
         },
         {

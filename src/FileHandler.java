@@ -14,10 +14,10 @@ import javax.swing.filechooser.FileSystemView;
 
 public class FileHandler {
 
-
-	
+	public String dfaName;
+	public String inpName;
 	public BufferedReader reader;
-	private CustomFileChooser fileChooser = new CustomFileChooser("in");
+	private CustomFileChooser fileChooser = new CustomFileChooser("inp");
 	private Vector<CustomFileChooser> fileHandlers = new Vector<CustomFileChooser>();
 
 	public FileHandler() {
@@ -62,8 +62,8 @@ public class FileHandler {
 				System.out.println("hello");
 				String name = selectedFile.getName();
 
-				if (!name.contains(".in")) {
-					selectedFile = new File(selectedFile.getParentFile(), name + '.' + "in");
+				if (!name.contains(".inp")) {
+					selectedFile = new File(selectedFile.getParentFile(), name + '.' + "inp");
 				}
 
 				return fileChooser.getSelectedFile().getName();
@@ -144,7 +144,7 @@ public class FileHandler {
 		int file = fileChooser.showOpenDialog(frame);
 		if (file == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-			if (selectedFile.isFile() && getFileExtension(getFileName()).equals("in")) {
+			if (selectedFile.isFile() && getFileExtension(getFileName()).equals("inp")) {
 				return selectedFile;
 			} else {
 				return null;
@@ -216,7 +216,7 @@ class CustomFileChooser extends JFileChooser {
 	public CustomFileChooser(String extension) {
 		super();
 		this.extension = extension;
-		addChoosableFileFilter(new FileNameExtensionFilter(String.format("*in files", extension), extension));
+		addChoosableFileFilter(new FileNameExtensionFilter(String.format("*inp files and *dfa files, ", extension, "dfa"), extension, "dfa"));
 	}
 
 	@Override
