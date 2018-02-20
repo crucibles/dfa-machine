@@ -121,6 +121,10 @@ public class DFATable {
         return null;
     }
 
+    public void clear(){
+        dfaTable.clear();
+    }
+
     // public int getStateOccurrence(String name){
     //     return Collections.frequency(dfaTable, name);
     // }
