@@ -3,6 +3,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -14,6 +16,8 @@ public class GUI {
 	public JFrame frame;
 	private JTable tbTransition;
 	private JTextPane tpStatus;
+	private JTextPane tpOutput;
+	private JTextPane tpInput;
 	public JButton btnLoadFile;
 	public JButton btnProcess;
 
@@ -55,7 +59,7 @@ public class GUI {
 		spInput.setBounds(215, 80, 195, 187);
 		frame.getContentPane().add(spInput);
 		
-		JTextPane tpInput = new JTextPane();
+		tpInput = new JTextPane();
 		tpInput.setEditable(false);
 		spInput.setViewportView(tpInput);
 		
@@ -63,8 +67,9 @@ public class GUI {
 		spOutput.setBounds(420, 80, 195, 187);
 		frame.getContentPane().add(spOutput);
 		
-		JTextPane tpOutput = new JTextPane();
+		tpOutput = new JTextPane();
 		tpOutput.setEditable(false);
+		tpOutput.setText("");
 		spOutput.setViewportView(tpOutput);
 		
 		JLabel lblTransition = new JLabel("Transition Table");
@@ -104,5 +109,41 @@ public class GUI {
 
 	public void setStatus(String status){
 		tpStatus.setText(status);
+	}
+
+	public void setTable(DFATable dfaTable){
+		DefaultTableModel model = (DefaultTableModel) tbTransition.getModel();
+		for(int i = 0; i < dfaTable.getNumberOfRows(); i++){
+			DFAState state = dfaTable.getStateAt(i);
+			String row[] = {state.getStateCategory(), state.getStateName(), state.getDestination0(), state.getDestination1()};
+			model.addRow(row);
+		}
+	}
+
+	public void addOutput(String newInp){
+		StyledDocument doc = tpOutput.getStyledDocument();
+
+		try {
+			doc.insertString(doc.getLength(), newInp, null);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void addInput(String newInp){
+		StyledDocument doc = tpInput.getStyledDocument();
+
+		try {
+			doc.insertString(doc.getLength(), newInp, null);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void resetText(){
+		tpOutput.setText("");
+		tpInput.setText("");
 	}
 }
