@@ -16,16 +16,6 @@
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-ExpressionEvaluator",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "ExpressionEvaluator",
-            "args": ""
-        },
-        {
-            "type": "java",
             "name": "Debug (Attach)",
             "request": "attach",
             "hostName": "localhost",

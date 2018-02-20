@@ -5,10 +5,10 @@ import java.io.BufferedReader;
 import java.io.File;
 
 public class DFAMachine {
-	
+
 	private GUI gui;
-	private File fileDFA;
-	private File fileInput;
+	FileHandler fileHandler = new FileHandler();
+	DFAState dState = new DFAState();
 
 	/**
 	 * Launch the application.
@@ -29,7 +29,8 @@ public class DFAMachine {
 	 * Constructor
 	 */
 	public DFAMachine() {
-		initialize();
+		createTable();
+		//initialize();
 	}
 
 	/*
@@ -58,7 +59,6 @@ public class DFAMachine {
 		System.out.println(dState.getVector().get(1).getStateName());
 		System.out.println(dState.getVector().get(2).getStateName());
 	}
-
 
 	private boolean checker(String transitions) {
 		if (transitions.indexOf('-') != transitions.lastIndexOf('-')) {
@@ -98,15 +98,20 @@ public class DFAMachine {
 	/**
 	 * Loads file.
 	 */
-	private void loadFile(){
-		FileHandler fileHandler = new FileHandler();
+	private void loadFile() {
+
 		File selectedFile = fileHandler.chooseFile(gui.frame);
-		if( selectedFile != null ){
-			
-		} else {
-						
+		System.out.println(selectedFile.getName());
+		if ( selectedFile != null) {
+			if (fileHandler.getFileExtension(fileHandler.getFileName()) == "inp") {
+				// fill the input table area
+			} else if(fileHandler.getFileExtension(fileHandler.getFileName()) == "dfa"){
+				// fill the dfa table
+			}
 		}
 	}
+
+	
 
 	/**
 	 * Processes input based on transition table.
