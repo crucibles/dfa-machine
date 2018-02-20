@@ -13,6 +13,7 @@ public class GUI {
 
 	public JFrame frame;
 	private JTable tbTransition;
+	private JTextPane tpStatus;
 	public JButton btnLoadFile;
 	public JButton btnProcess;
 
@@ -86,7 +87,7 @@ public class GUI {
 		lblStatus.setBounds(36, 286, 69, 21);
 		frame.getContentPane().add(lblStatus);
 		
-		JTextPane tpStatus = new JTextPane();
+		tpStatus = new JTextPane();
 		tpStatus.setBackground(new Color(240, 240, 240, 240));
 		tpStatus.setEditable(false);
 		tpStatus.setBounds(99, 286, 496, 50);
@@ -99,5 +100,9 @@ public class GUI {
 		btnProcess = new JButton("Process");
 		btnProcess.setBounds(420, 11, 195, 33);
 		frame.getContentPane().add(btnProcess);
+	}
+
+	public void setStatus(String status){
+		tpStatus.setText(status);
 	}
 }
