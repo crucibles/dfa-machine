@@ -1,11 +1,8 @@
-import java.util.Vector;
-
 public class DFAState {
 	private String stateCategory;
 	private String stateName;
     private String destination0;
     private String destination1;
-	private Vector<DFAState> dfaVector = new Vector<DFAState>();
 
 	public DFAState() {
 
@@ -15,8 +12,7 @@ public class DFAState {
         this.stateCategory = stateCategory;
 		this.stateName = stateName;
 		this.destination0 = destination0;
-		//DFAState ds = new DFAState(stateCategory, stateName, destination0, destination1);
-		this.dfaVector.add(this);
+		this.destination1 = destination1;
 	}
 
 	public String getStateCategory() {
@@ -33,9 +29,5 @@ public class DFAState {
     
     public String getDestination1() {
 		return this.destination1;
-	}
-
-	public Vector<DFAState> getVector() {
-		return this.dfaVector;
 	}
 }

@@ -3,12 +3,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+import javax.swing.JOptionPane;
 
 public class DFAMachine {
 
 	private GUI gui;
+	private FileHandler dfaHandler = null;
+	private FileHandler inputHandler = null;
 	FileHandler fileHandler = new FileHandler();
-	DFAState dState = new DFAState();
+	DFATable dfaTable = new DFATable();
 
 	/**
 	 * Launch the application.
@@ -29,8 +37,8 @@ public class DFAMachine {
 	 * Constructor
 	 */
 	public DFAMachine() {
-		//createTable();
 		initialize();
+		createTable();
 	}
 
 	/*
@@ -39,7 +47,6 @@ public class DFAMachine {
 	private void createTable() {
 
 		String transitions = "-,A,B,A\n$,B,B,C\n+,C,B,A";
-		String inp = "110011\n0111110001\n1001010\n100";
 
 		if (checker(transitions)) {
 			String[] lines = transitions.trim().split("\\s");
@@ -50,14 +57,11 @@ public class DFAMachine {
 				System.out.println(line);
 				String[] tokens = line.trim().split(",");
 
-				dState.getVector().add(new DFAState(tokens[0], tokens[1], tokens[2], tokens[3]));
-
+				dfaTable.addState(new DFAState(tokens[0], tokens[1], tokens[2], tokens[3]));
 			}
 		}
 
-		System.out.println(dState.getVector().get(0).getStateName());
-		System.out.println(dState.getVector().get(1).getStateName());
-		System.out.println(dState.getVector().get(2).getStateName());
+		gui.setTable(dfaTable);
 	}
 
 	private boolean checker(String transitions) {
@@ -70,6 +74,8 @@ public class DFAMachine {
 			System.out.println("has a state that is both start and final!");
 			return false;
 		}
+
+		//AHJ: unimplemented; if same state name
 
 		return true;
 	}
@@ -84,7 +90,12 @@ public class DFAMachine {
 		gui.btnLoadFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				loadFile();
+				try {
+					loadFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		gui.btnProcess.addMouseListener(new MouseAdapter() {
@@ -97,10 +108,12 @@ public class DFAMachine {
 
 	/**
 	 * Loads file.
+	 * @throws IOException
 	 */
-	private void loadFile() {
-
+	private void loadFile() throws IOException {
+		FileHandler fileHandler = new FileHandler();
 		File selectedFile = fileHandler.chooseFile(gui.frame);
+<<<<<<< HEAD
 		System.out.println(selectedFile.getName());
 		if (selectedFile != null) {
 			if (fileHandler.getFileExtension(fileHandler.getFileName()) == "inp") {
@@ -109,7 +122,26 @@ public class DFAMachine {
 
 			} else if (fileHandler.getFileExtension(fileHandler.getFileName()) == "dfa") {
 				// fill the dfa table
+=======
+		if (selectedFile != null) {
+			FileReader file = new FileReader(fileHandler.getFileChooser().getSelectedFile().getAbsolutePath());
+			fileHandler.reader = new BufferedReader(file);
+			String fileExt = fileHandler.getFileExtension(fileHandler.getFileName());
+			if (fileExt.equals("in")) {
+				inputHandler = fileHandler;
+			} else if (fileExt.equals("dfa")) {
+				System.out.println("dfa!");
+				dfaHandler = fileHandler;
+>>>>>>> 7e17dc8514d8385b31a4fd9132a51efd14bbe599
 			}
+			// String line = fileHandler.reader.readLine();
+
+			// for (int lineNum = 1; line != null; lineNum++) {
+			// 	System.out.println(line);
+			// 	line = fileHandler.reader.readLine();
+			// }
+		} else {
+
 		}
 	}
 
@@ -117,7 +149,26 @@ public class DFAMachine {
 	 * Processes input based on transition table.
 	 */
 	private void process() {
+		//String inp = "110011\n0111110001\n1001010\n100";
+		gui.resetText();
+		String inp = "110011";
+		String isValid = checkInputString(inp)? "VALID\n": "INVALID\n";
+		gui.addInput(inp);
+		gui.addOutput(isValid);
+		
+		/*if(inputHandler == null){
+			gui.setStatus("Cannot process. You have not loaded an .inp file!");
+			JOptionPane.showMessageDialog(gui.frame, "Cannot process. You have not loaded an .inp file!", "File Error", JOptionPane.PLAIN_MESSAGE);
+		} else if(dfaHandler == null){
+			JOptionPane.showMessageDialog(gui.frame, "Cannot process. You have not loaded a .dfa file!", "File Error", JOptionPane.PLAIN_MESSAGE);
+		} else {
+				
+		}*/
+	}
 
+	private boolean checkInputString(String input){
+		dfaTable.isValidString(input);
+		return false;
 	}
 
 }
