@@ -98,7 +98,12 @@ public class DFAMachine {
 		gui.btnProcess.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				process();
+				try {
+					process();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 	}
@@ -137,8 +142,9 @@ public class DFAMachine {
 
 	/**
 	 * Processes input based on transition table.
+	 * @throws IOException
 	 */
-	private void process() {
+	private void process() throws IOException {
 		//String inp = "110011\n0111110001\n1001010\n100";
 
 		if (inputHandler == null) {
@@ -157,14 +163,17 @@ public class DFAMachine {
 			gui.resetText();
 			String line = gui.tpInput.getText();
 			String[] lines = line.trim().split("\\s");
-
+			String output = "";
 			for (int i = 0; i < lines.length; i++) {
 
 				String inp = lines[i];
 				String isValid = checkInputString(inp) ? "VALID\n" : "INVALID\n";
+				output+=isValid;
 				gui.addOutput(isValid);
 
 			}
+
+			fileHandler.createFile(output, gui.frame);
 			
 		}
 	}

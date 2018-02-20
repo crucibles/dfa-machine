@@ -17,12 +17,14 @@ public class FileHandler {
 
 	public String dfaName;
 	public String inpName;
+	public File inpFile;
 	public BufferedReader reader;
 	private CustomFileChooser fileChooser = new CustomFileChooser("inp");
 	private File selectedFile;
 
 	public FileHandler() {
-		this.fileChooser.setCurrentDirectory(new File(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath()));
+		this.fileChooser
+				.setCurrentDirectory(new File(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath()));
 		this.fileChooser.setAcceptAllFileFilterUsed(false);
 	}
 
@@ -91,27 +93,22 @@ public class FileHandler {
 	public String createFile(String output, JFrame frame) throws IOException {
 		Writer writer = null;
 
+		System.out.println("hi saving..");
+
 		try {
-			int status = fileChooser.showSaveDialog(frame);
+			//AHJ: unimplemented; #01: weird part here. Filechooser can choose in or out for extension in saving file... so unsaon pagkabalo? (Also, this savefile function does not include saving of .in file)
+			String fileName = inpFile.getCanonicalPath();
+			System.out.println(fileName);
 
-			if (status == JFileChooser.APPROVE_OPTION) {
-				System.out.println("hi");
-				selectedFile = fileChooser.getSelectedFile();
+			selectedFile = new File(fileName.replace(".inp", ".out"));
+			
 
-				try {
-					//AHJ: unimplemented; #01: weird part here. Filechooser can choose in or out for extension in saving file... so unsaon pagkabalo? (Also, this savefile function does not include saving of .in file)
-					String fileName = selectedFile.getCanonicalPath();
-					if (!fileName.endsWith(".inp")) {
-						selectedFile = new File(fileName + ".inp");
-					}
-					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(selectedFile)));
-					writer.write(output);
-					//AHJ: unimplemented; (not properly implemented)refer to comment #01
-					return getFileName();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(selectedFile)));
+			writer.write(output);
+			//AHJ: unimplemented; (not properly implemented)refer to comment #01
+			return selectedFile.getName();
+		} catch (IOException e) {
+			e.printStackTrace();
 			return null;
 		} finally {
 			try {
@@ -134,7 +131,14 @@ public class FileHandler {
 		int file = fileChooser.showOpenDialog(frame);
 		if (file == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-			if (selectedFile.isFile() && (getFileExtension(getFileName()).equals("inp") || getFileExtension(getFileName()).equals("dfa")) ){
+			if (selectedFile.isFile() && (getFileExtension(getFileName()).equals("inp")
+					|| getFileExtension(getFileName()).equals("dfa"))) {
+				if (getFileExtension(getFileName()).equals("inp")) {
+					this.inpName = getFileName();
+					this.inpFile = selectedFile;
+				} else if (getFileExtension(getFileName()).equals("dfa")) {
+					this.dfaName = getFileName();
+				}
 				return selectedFile;
 			} else {
 				return null;
@@ -168,15 +172,15 @@ public class FileHandler {
 	 */
 	public String getFileContent() throws IOException {
 		this.selectedFile = fileChooser.getSelectedFile();
-		
+
 		// stores the selected file and obtained a line
 		FileReader fileReader = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
 		reader = new BufferedReader(fileReader);
 		String line = reader.readLine();
 		String fileContent = "";
-		while(line != null){
-			fileContent+=line;
-			fileContent+="\n";
+		while (line != null) {
+			fileContent += line;
+			fileContent += "\n";
 			line = reader.readLine(); // reads next line
 		}
 
@@ -222,7 +226,8 @@ class CustomFileChooser extends JFileChooser {
 	public CustomFileChooser(String extension) {
 		super();
 		this.extension = extension;
-		addChoosableFileFilter(new FileNameExtensionFilter(String.format("*inp files and *dfa files, ", extension, "dfa"), extension, "dfa"));
+		addChoosableFileFilter(new FileNameExtensionFilter(
+				String.format("*inp files and *dfa files, ", extension, "dfa"), extension, "dfa"));
 	}
 
 	@Override
